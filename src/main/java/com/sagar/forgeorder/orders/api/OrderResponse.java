@@ -31,7 +31,8 @@ public record OrderResponse(
     public record PaymentSummary(
             String status,
             String providerPaymentId,
-            String declineReason
+            String declineReason,
+            String idempotencyKey
     ) {
     }
 

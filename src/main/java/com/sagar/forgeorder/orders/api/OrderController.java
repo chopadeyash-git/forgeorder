@@ -199,7 +199,7 @@ public class OrderController {
         OrderResponse.PaymentSummary paymentSummary = paymentAttemptRepository
                 .findFirstByOrderIdOrderByCreatedAtDesc(order.getId())
                 .map(pa -> new OrderResponse.PaymentSummary(
-                        pa.getStatus().name(), pa.getProviderPaymentId(), pa.getDeclineReason()))
+                        pa.getStatus().name(), pa.getProviderPaymentId(), pa.getDeclineReason(), pa.getIdempotencyKey()))
                 .orElse(null);
 
         return OrderResponse.from(order, inventorySummary, paymentSummary);

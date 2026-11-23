@@ -11,11 +11,9 @@ import java.util.UUID;
 @Getter
 @IdClass(ProcessedMessageId.class)
 public class ProcessedMessage {
-
     @Id
     @Column(name = "consumer_name")
     private String consumerName;
-
     @Id
     @Column(name = "event_id")
     private UUID eventId;

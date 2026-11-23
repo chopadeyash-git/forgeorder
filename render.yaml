@@ -1,0 +1,71 @@
+services:
+  - type: web
+    name: forgeorder
+    runtime: docker
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: JAVA_TOOL_OPTIONS
+        value: -Duser.timezone=UTC
+      - key: DB_HOST
+        fromDatabase:
+          name: forgeorder-postgres
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: forgeorder-postgres
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: forgeorder-postgres
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: forgeorder-postgres
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: forgeorder-postgres
+          property: password
+      - key: SPRING_DATA_REDIS_HOST
+        fromRedis:
+          name: forgeorder-redis
+          property: host
+      - key: SPRING_DATA_REDIS_PORT
+        fromRedis:
+          name: forgeorder-redis
+          property: port
+      - key: SPRING_DATA_REDIS_PASSWORD
+        fromRedis:
+          name: forgeorder-redis
+          property: password
+      - key: SPRING_RABBITMQ_ADDRESSES
+        sync: false
+
+  - type: pserv
+    name: forgeorder-rabbitmq
+    runtime: image
+    image:
+      url: rabbitmq:3-management
+    plan: free
+    region: oregon
+    envVars:
+      - key: RABBITMQ_DEFAULT_USER
+        value: forgeorder_user
+      - key: RABBITMQ_DEFAULT_PASS
+        value: forgeorder_pass
+
+databases:
+  - name: forgeorder-postgres
+    plan: free
+    databaseName: forgeorder
+    user: forgeorder_user
+    region: oregon
+
+redis:
+  - name: forgeorder-redis
+    plan: free
+    region: oregon
+    maxmemoryPolicy: noeviction
