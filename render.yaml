@@ -29,33 +29,20 @@ services:
         fromDatabase:
           name: forgeorder-postgres
           property: password
-      - key: SPRING_DATA_REDIS_HOST
-        fromRedis:
+      - key: SPRING_DATA_REDIS_URL
+        fromService:
+          type: keyvalue
           name: forgeorder-redis
-          property: host
-      - key: SPRING_DATA_REDIS_PORT
-        fromRedis:
-          name: forgeorder-redis
-          property: port
-      - key: SPRING_DATA_REDIS_PASSWORD
-        fromRedis:
-          name: forgeorder-redis
-          property: password
+          property: connectionString
       - key: SPRING_RABBITMQ_ADDRESSES
         sync: false
 
-  - type: pserv
-    name: forgeorder-rabbitmq
-    runtime: image
-    image:
-      url: rabbitmq:3-management
+  - type: keyvalue
+    name: forgeorder-redis
     plan: free
     region: oregon
-    envVars:
-      - key: RABBITMQ_DEFAULT_USER
-        value: forgeorder_user
-      - key: RABBITMQ_DEFAULT_PASS
-        value: forgeorder_pass
+    maxmemoryPolicy: noeviction
+    ipAllowList: []
 
 databases:
   - name: forgeorder-postgres
@@ -63,9 +50,3 @@ databases:
     databaseName: forgeorder
     user: forgeorder_user
     region: oregon
-
-redis:
-  - name: forgeorder-redis
-    plan: free
-    region: oregon
-    maxmemoryPolicy: noeviction
