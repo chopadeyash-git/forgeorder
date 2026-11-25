@@ -20,7 +20,7 @@ public class OpenApiConfig {
                                                                 "payment reconciliation, and dead-letter handling.")
                                                 .version("1.0")
                                                 .contact(new Contact()
-                                                                .name("Sagar")
+                                                                .name("Yash")
                                                                 .url("https://github.com/")));
         }
 }
